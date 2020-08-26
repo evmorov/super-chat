@@ -9,7 +9,7 @@ export const AuthScreen = ({ onSubmit }) => {
   };
 
   return (
-    <View style={styles.block}>
+    <View style={styles.auth}>
       <Text style={styles.text}>Enter your nickname</Text>
       <View style={styles.inputBlock}>
         <TextInput
@@ -27,7 +27,7 @@ export const AuthScreen = ({ onSubmit }) => {
 };
 
 const styles = StyleSheet.create({
-  block: {
+  auth: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
@@ -37,14 +37,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 30,
   },
+  inputBlock: {
+    flexDirection: 'row',
+  },
   input: {
     width: '70%',
     borderStyle: 'solid',
     borderBottomWidth: 2,
     padding: 10,
     marginRight: 10,
-  },
-  inputBlock: {
-    flexDirection: 'row',
   },
 });

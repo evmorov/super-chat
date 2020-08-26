@@ -13,8 +13,11 @@ export default class App extends React.Component {
 
     this.state = {
       current_user_id: null,
+      messages: [],
     };
+
     this.subscribe = this.subscribe.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
   }
 
   ws = new WebSocket(URL);
@@ -23,36 +26,50 @@ export default class App extends React.Component {
     this.ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
       const event = data[3];
-      const { response, _status } = data[4];
+      const response_data = data[4];
 
       switch (event) {
         case 'phx_reply':
-          this.handleReply(response);
+          this.handleReply(response_data);
+          break;
+        case 'new_message':
+          this.handleNewMessage(response_data);
           break;
       }
     };
   }
 
-  handleReply(response) {
+  handleReply({ response }) {
     if (response.user_id) {
       this.setState({ current_user_id: response.user_id });
     } else if (response.message_id) {
+      // this.setState({ my_messages_ids: [...my_messages_ids, response.message_id] });
     }
   }
 
-  sendMessage(event, payload) {
+  handleNewMessage({ message, nickname, time }) {
+    this.setState({
+      messages: [...this.state.messages, { message, nickname, time }]
+    })
+  }
+
+  sendSocketMessage(event, payload) {
     const msg = [null, null, CHANNEL, event, payload];
     this.ws.send(JSON.stringify(msg));
   }
 
   subscribe(nickname) {
-    this.sendMessage('phx_join', { nickname });
+    this.sendSocketMessage('phx_join', { nickname });
+  }
+
+  sendMessage(message) {
+    this.sendSocketMessage('new_message', { message });
   }
 
   render() {
     let screen = <AuthScreen onSubmit={this.subscribe} />;
     if (this.state.current_user_id) {
-      screen = <ChatScreen />;
+      screen = <ChatScreen messages={this.state.messages} onSubmit={this.sendMessage} />;
     }
 
     return (
