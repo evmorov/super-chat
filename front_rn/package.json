@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "format": "prettier --parser babel --write 'src/**/*.js'"
+    "format": "prettier --parser babel --write 'src/**/*.js' 'App.js'"
   },
   "dependencies": {
     "expo": "~38.0.8",
