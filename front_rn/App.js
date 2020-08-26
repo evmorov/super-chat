@@ -23,6 +23,10 @@ export default class App extends React.Component {
   ws = new WebSocket(URL);
 
   componentDidMount() {
+    this.ws.onopen = () => {
+      this.heartbeat()
+    }
+
     this.ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
       const event = data[3];
@@ -39,6 +43,13 @@ export default class App extends React.Component {
     };
   }
 
+  heartbeat() {
+    if (!this.ws) return;
+    if (this.ws.readyState !== 1) return;
+    this.sendSocketMessage('phoenix', 'heartbeat', {});
+    setTimeout(() => this.heartbeat(), 5000);
+  }
+
   handleReply({ response }) {
     if (response.user_id) {
       this.setState({ current_user_id: response.user_id });
@@ -49,21 +60,21 @@ export default class App extends React.Component {
 
   handleNewMessage({ message, nickname, time }) {
     this.setState({
-      messages: [...this.state.messages, { message, nickname, time }]
-    })
+      messages: [...this.state.messages, { message, nickname, time }],
+    });
   }
 
-  sendSocketMessage(event, payload) {
-    const msg = [null, null, CHANNEL, event, payload];
+  sendSocketMessage(channel, event, payload) {
+    const msg = [null, null, channel, event, payload];
     this.ws.send(JSON.stringify(msg));
   }
 
   subscribe(nickname) {
-    this.sendSocketMessage('phx_join', { nickname });
+    this.sendSocketMessage(CHANNEL, 'phx_join', { nickname });
   }
 
   sendMessage(message) {
-    this.sendSocketMessage('new_message', { message });
+    this.sendSocketMessage(CHANNEL, 'new_message', { message });
   }
 
   render() {
