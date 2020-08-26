@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "front_expo",
-    "slug": "front_expo",
+    "name": "front_rn",
+    "slug": "front_rn",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
