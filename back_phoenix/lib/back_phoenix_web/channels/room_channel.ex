@@ -5,7 +5,7 @@ defmodule BackPhoenixWeb.RoomChannel do
   def join("room:lobby", payload, socket) do
     if authorized?(payload) do
       socket = socket |> assign(:nickname, payload["nickname"])
-      response_payload = %{id: random_id()}
+      response_payload = %{user_id: random_id()}
       {:ok, response_payload, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -24,7 +24,7 @@ defmodule BackPhoenixWeb.RoomChannel do
       }
     )
 
-    response_payload = %{id: random_id()}
+    response_payload = %{message_id: random_id()}
 
     {:reply, {:ok, response_payload}, socket}
   end
