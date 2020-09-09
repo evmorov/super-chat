@@ -24,8 +24,8 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.ws.onopen = () => {
-      this.heartbeat()
-    }
+      this.heartbeat();
+    };
 
     this.ws.onmessage = (e) => {
       const data = JSON.parse(e.data);

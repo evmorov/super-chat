@@ -1,5 +1,5 @@
-import React from 'react'
-import { Text, View } from 'react-native'
+import React from 'react';
+import { Text, View } from 'react-native';
 
 export default class Message extends React.Component {
   render() {
@@ -7,8 +7,10 @@ export default class Message extends React.Component {
 
     return (
       <View>
-        <Text>{time} {nickname}: {message}</Text>
+        <Text>
+          {time} {nickname}: {message}
+        </Text>
       </View>
-    )
+    );
   }
 }
